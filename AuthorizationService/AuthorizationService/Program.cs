@@ -28,7 +28,7 @@ namespace AuthorizationAPI
             builder.Services.AddDbContext<RepositoryContext>(
                 options =>
                 options.UseSqlServer(connectionString,
-                x => x.MigrationsAssembly("Authorization.Domain")));
+                x => x.MigrationsAssembly("AuthorizationService")));
 
             builder.Services.AddControllers();
 
