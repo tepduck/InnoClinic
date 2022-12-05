@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Authorization.Domain.Models
 {
-    public class Account
-    {
-        public Guid Id { get; set; }
+    public class Account : IdentityUser
+    { 
+        public string Id { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
         public bool IsEmailVerified { get; set; }
@@ -16,13 +17,13 @@ namespace Authorization.Domain.Models
         //public Guid PhotoId { get; set; }
         //public Photo Photo { get; set; }
 
-        public Guid PatientId { get; set; }
+        public string PatientId { get; set; }
         public Patient? Patient { get; set; }
 
-        public Guid DoctorId { get; set; }
+        public string DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
 
-        public Guid ReceptionistId { get; set; }
+        public string ReceptionistId { get; set; }
         public Receptionist? Receptionist { get; set; }
 
     }

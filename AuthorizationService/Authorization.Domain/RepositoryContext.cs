@@ -1,11 +1,13 @@
 ﻿using Authorization.Domain.Configuration;
 using Authorization.Domain.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel;
 
 namespace Authorization.Domain
 {
-    public class RepositoryContext : DbContext
+    public class RepositoryContext : IdentityDbContext<Account>
     {
         public RepositoryContext(DbContextOptions options) : base(options)
         {
@@ -18,6 +20,20 @@ namespace Authorization.Domain
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Account>(entity => entity.ToTable(name: "Accounts"));
+            modelBuilder.Entity<IdentityRole>(entity => entity.ToTable(name: "Roles"));
+            modelBuilder.Entity<IdentityUserRole<string>>(entity => 
+                entity.ToTable(name: "AccountRoles"));
+            modelBuilder.Entity<IdentityUserClaim<string>>(entity =>
+                entity.ToTable(name: "AccountClaims"));
+            modelBuilder.Entity<IdentityUserLogin<string>>(entity =>
+                entity.ToTable(name: "AccountLogins"));
+            modelBuilder.Entity<IdentityUserToken<string>>(entity =>
+                entity.ToTable(name: "AccountTokens"));
+            modelBuilder.Entity<IdentityRoleClaim<string>>(entity =>
+                entity.ToTable(name: "RoleClaims"));
+
 
             modelBuilder.ApplyConfiguration(new AccountConfiguration());
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());

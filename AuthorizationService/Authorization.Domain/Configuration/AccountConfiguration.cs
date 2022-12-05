@@ -22,11 +22,11 @@ namespace Authorization.Domain.Configuration
                 .HasForeignKey<Patient>(p => p.AccountId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            //builder
-            //    .HasOne(a => a.Photo)
-            //    .WithOne(p => p.Account)
-            //    .HasForeignKey<Photo>(p => p.AccountId)
-            //    .OnDelete(DeleteBehavior.Cascade);
+            /*builder
+                .HasOne(a => a.Photo)
+                .WithOne(p => p.Account)
+                .HasForeignKey<Photo>(p => p.AccountId)
+                .OnDelete(DeleteBehavior.Cascade);*/
 
             builder
                 .HasOne(a => a.Receptionist)

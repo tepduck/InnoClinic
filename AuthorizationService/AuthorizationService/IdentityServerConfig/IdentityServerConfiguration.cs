@@ -23,33 +23,5 @@ namespace AuthorizationService.IdentityServerConfig
           {
                   new IdentityResources.OpenId()
           };
-        public static List<TestUser> GetTestUsers() =>
-            new List<TestUser>()
-            {
-                new TestUser
-                {
-                    SubjectId = Guid.NewGuid().ToString(),
-                    Username= "test",
-                    Password= "test",
-                    Claims = new List<Claim>
-                    {
-                        new Claim("phone_number", "+37529331867"),
-                        new Claim("email", "test@gmail.com"),
-                        new Claim("isEmailVerified", "yes")
-                    }
-                },
-                new TestUser
-                {
-                    SubjectId = Guid.NewGuid().ToString(),
-                    Username= "test1",
-                    Password= "test1",
-                    Claims = new List<Claim>
-                    {
-                        new Claim("phone_number", "+37529333333"),
-                        new Claim("email", "test1@gmail.com"),
-                        new Claim("isEmailVerified", "no")
-                    }
-                }
-            };
     }
 }
