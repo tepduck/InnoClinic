@@ -1,11 +1,12 @@
+using Authorization.Data;
 using Authorization.Domain;
+using Authorization.Domain.Interfaces;
 using Authorization.Domain.Models;
+using AuthorizationService;
 using AuthorizationService.IdentityServerConfig;
 using IdentityServer4.Models;
-using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection;
 
 namespace AuthorizationAPI
 {
@@ -18,16 +19,18 @@ namespace AuthorizationAPI
             #region Services
             var connectionString = builder.Configuration.GetConnectionString("sqlConnection");
 
-            builder.Services.AddMediatR(Assembly.GetExecutingAssembly());
-
             builder.Services.AddDbContext<RepositoryContext>(
                 options =>
                 options.UseSqlServer(connectionString,
                 x => x.MigrationsAssembly("AuthorizationService")));
+            builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 
             builder.Services.AddIdentity<Account, IdentityRole>(config =>
             {
-                config.Password.RequiredLength = 8;
+                config.Password.RequiredLength = 4;
+                config.Password.RequireNonAlphanumeric = false;
+                config.Password.RequireLowercase = false;
+                config.Password.RequireUppercase = false;
             })
                 .AddEntityFrameworkStores<RepositoryContext>()
                 .AddDefaultTokenProviders();
@@ -37,16 +40,12 @@ namespace AuthorizationAPI
                 .AddInMemoryClients(IdentityServerConfiguration.GetClients())
                 .AddInMemoryIdentityResources(IdentityServerConfiguration.GetIdentityResources())
                 .AddInMemoryApiResources(new List<ApiResource>())
+                .AddProfileService<CustomProfile>()
                 .AddDeveloperSigningCredential();
 
-            builder.Services.ConfigureApplicationCookie(config => 
-            {
-                config.Cookie.Name = "IdentityCookie";
-                config.LoginPath = "/Auth/Login";
-                config.LogoutPath = "/Auth/Logout";
-            });
-
             builder.Services.AddControllers();
+
+            builder.Services.AddAutoMapper(typeof(MappingProfile));
 
             #endregion
 
@@ -67,15 +66,10 @@ namespace AuthorizationAPI
 
             app.UseStaticFiles();
             app.UseRouting();
-
             app.UseIdentityServer();
-            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.MapControllers();
 
             app.Run();
 
