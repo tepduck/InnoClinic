@@ -11,6 +11,7 @@ using FluentValidation.AspNetCore;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace AuthorizationAPI
 {
@@ -28,6 +29,8 @@ namespace AuthorizationAPI
                 options.UseSqlServer(connectionString,
                 x => x.MigrationsAssembly("AuthorizationService")));
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
+
+            builder.Services.AddSingleton<IConfigureOptions<IdentityOptions>, AspIdentityConfig>();
 
             builder.Services.AddIdentity<Account, IdentityRole>()
                 .AddEntityFrameworkStores<RepositoryContext>()
