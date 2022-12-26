@@ -60,8 +60,6 @@ namespace AuthorizationAPI
 
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
             else
@@ -77,6 +75,8 @@ namespace AuthorizationAPI
             app.UseAuthorization();
 
             app.MapControllers();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.Run();
 
