@@ -8,8 +8,12 @@ namespace AuthorizationService
     {
         public MappingProfile() 
         {
-            CreateMap<RegisterAccountDto, Account>();
-            CreateMap<LoginAccountDto, Account>();
+            CreateMap<RegisterAccountDto, Account>()
+                .ForMember(a => a.UserName, 
+                ad => ad.MapFrom(x => x.Email));
+            CreateMap<LoginAccountDto, Account>()
+                .ForMember(a => a.UserName,
+                ad => ad.MapFrom(x => x.Email));
         }
     }
 }

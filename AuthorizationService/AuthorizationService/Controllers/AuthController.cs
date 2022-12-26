@@ -22,13 +22,14 @@ namespace AuthorizationService.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        ///  for registrattion 
+        /// </summary>
+        /// <param name="registerAccountDto"></param>
+        /// <returns></returns>
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterAccountDto registerAccountDto)
         {
-            if (registerAccountDto == null)
-            {
-                return BadRequest("RegisterAccountDto object is null.");
-            }
 
             if (!ModelState.IsValid)
             {
@@ -45,7 +46,7 @@ namespace AuthorizationService.Controllers
                     ModelState.TryAddModelError(error.Code, error.Description);
                 }
 
-                return BadRequest();
+                return BadRequest(ModelState);
             }
 
             await _userManager.AddToRolesAsync(account, registerAccountDto.Roles);

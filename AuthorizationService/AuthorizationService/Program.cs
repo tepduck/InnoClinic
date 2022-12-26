@@ -1,9 +1,13 @@
 using Authorization.Data;
 using Authorization.Domain;
+using Authorization.Domain.DataTransferObject;
 using Authorization.Domain.Interfaces;
 using Authorization.Domain.Models;
 using AuthorizationService;
+using AuthorizationService.FluentValidation;
 using AuthorizationService.IdentityServerConfig;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,13 +29,7 @@ namespace AuthorizationAPI
                 x => x.MigrationsAssembly("AuthorizationService")));
             builder.Services.AddScoped<IRepositoryManager, RepositoryManager>();
 
-            builder.Services.AddIdentity<Account, IdentityRole>(config =>
-            {
-                config.Password.RequiredLength = 4;
-                config.Password.RequireNonAlphanumeric = false;
-                config.Password.RequireLowercase = false;
-                config.Password.RequireUppercase = false;
-            })
+            builder.Services.AddIdentity<Account, IdentityRole>()
                 .AddEntityFrameworkStores<RepositoryContext>()
                 .AddDefaultTokenProviders();
 
@@ -43,9 +41,16 @@ namespace AuthorizationAPI
                 .AddProfileService<CustomProfile>()
                 .AddDeveloperSigningCredential();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddFluentValidation(s => s.RegisterValidatorsFromAssemblyContaining<Program>());
 
             builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+            builder.Services.ConfigureSwagger();
+            builder.Services.AddSwaggerGen(s =>
+            {
+                s.IncludeXmlComments("swagger.xml");
+            });
 
             #endregion
 
@@ -55,6 +60,8 @@ namespace AuthorizationAPI
 
             if (app.Environment.IsDevelopment())
             {
+                app.UseSwagger();
+                app.UseSwaggerUI();
                 app.UseDeveloperExceptionPage();
             }
             else
