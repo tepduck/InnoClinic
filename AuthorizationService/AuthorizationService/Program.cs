@@ -1,12 +1,9 @@
 using Authorization.Data;
 using Authorization.Domain;
-using Authorization.Domain.DataTransferObject;
 using Authorization.Domain.Interfaces;
 using Authorization.Domain.Models;
 using AuthorizationService;
-using AuthorizationService.FluentValidation;
 using AuthorizationService.IdentityServerConfig;
-using FluentValidation;
 using FluentValidation.AspNetCore;
 using IdentityServer4.Models;
 using Microsoft.AspNetCore.Identity;
