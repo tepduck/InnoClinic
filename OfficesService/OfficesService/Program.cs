@@ -1,7 +1,10 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using OfficesService.Data.Repositories;
 using OfficesService.Domain;
 using OfficesService.Domain.Interfaces;
+using OfficesService.ImageServices;
 using OfficesService.ServiceExtensions;
 
 namespace OfficesService
@@ -18,8 +21,16 @@ namespace OfficesService
 
             builder.Services.AddSingleton<IOfficeDatabaseSettings>(provider => 
                 provider.GetRequiredService<IOptions<OfficeDatabaseSettings>>().Value);
+            builder.Services.AddScoped<OfficeRepository>();
+            builder.Services.AddSingleton<ImageService>();
+            builder.Services.AddAutoMapper(typeof(Program));
             builder.Services.AddControllers();
             builder.Services.AddAuthorization();
+
+            builder.Services.Configure<ApiBehaviorOptions>(opt =>
+            {
+                opt.SuppressModelStateInvalidFilter = true;
+            });
 
             builder.Services.ConfigureSwagger();
             builder.Services.AddSwaggerGen(s =>
@@ -44,6 +55,7 @@ namespace OfficesService
 
             app.UseStaticFiles();
             app.UseRouting();
+
             app.UseAuthorization();
 
             app.MapControllers();

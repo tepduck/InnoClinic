@@ -15,20 +15,20 @@ namespace OfficesService.Data.Repositories
             _offices = database.GetCollection<Office>(settings.OfficeCollectionName);
         }
 
-        public async Task<List<Office>> GetPhotosAsync() =>
+        public async Task<List<Office>> GetOfficesAsync() =>
             await _offices.Find(p => true).ToListAsync();
 
-        public async Task<Office> GetPhotoAsync(string id) =>
+        public async Task<Office> GetOfficeAsync(string id) =>
             await _offices.Find<Office>(p => p.Id.Equals(id)).FirstOrDefaultAsync();
 
-        public async Task<Office> CreatePhotoAsync(Office office) 
+        public async Task<Office> CreateOfficeAsync(Office office) 
         { 
             await _offices.InsertOneAsync(office);
             return office;
         }
 
-        public async Task UpdatePhotoAsync(string id, Office office) => await _offices.ReplaceOneAsync(p => p.Id.Equals(id), office);
+        public async Task UpdateOfficeAsync(string id, Office office) => await _offices.ReplaceOneAsync(p => p.Id.Equals(id), office);
 
-        public async Task DeletePhotoAsync(string id) => await _offices.DeleteOneAsync(p => p.Id.Equals(id));
+        //public async Task DeletePhotoAsync(string id) => await _offices.DeleteOneAsync(p => p.Id.Equals(id));
     }
 }
